@@ -29,8 +29,8 @@
 
 
 /*------------------- VARIABLES SENDER PART ---------------*/
-char ip[16] = "192.168.202.189"; //ip of the slave
-int port = 8080;
+// char ip[16] = "192.168.202.189"; //ip of the slave
+// int port = 8080;
 /*------------------- END VARIABLES SENDER PART ---------------*/
 
 
@@ -94,7 +94,6 @@ volatile signed irq_count;
 volatile unsigned temp_a = 0;
 volatile unsigned temp_b = 0;
 
-//volatile signed motor_speed_m = 0;		// 0 to 1073741823 (MAX)
 
 void www();
 void irc_isr(void)
@@ -147,7 +146,7 @@ void irc_cleanup(void)
 
 //we can use atol to convert string to int long
 
-int sender(char ip[], int port , char message[])/*should be 8080 ?*/
+int sender(char ip[], int port , char message[])/*should be 8080 */
 {
 
   char buf[MESSAGE_MAX_LEN];	
@@ -188,14 +187,11 @@ int sender(char ip[], int port , char message[])/*should be 8080 ?*/
 /*------------------------------------ MASTER MAIN -----------------------------------*/
 
 int master()
-{
-        //TASK_ID st;
-        
-    	char message[MESSAGE_MAX_LEN];
+{       
+        char message[MESSAGE_MAX_LEN];
         
         irc_init();
-        char key;
-
+        char key;       
         while (1) {
         	if (key == 'E')
         	{

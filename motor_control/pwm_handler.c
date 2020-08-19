@@ -34,10 +34,6 @@
 
 /*------------------- END INCLUDES FOR THE SERVER PART ---------------*/
 
-/*------------------- VARIABLES SENDER PART ---------------*/
-//int port = 8080;
-/*------------------- END VARIABLES SENDER PART ---------------*/
-
 
 #define REGISTER(base, offs) (*((volatile UINT32 *)((base) + (offs))))
 #define BIT(i) ((1) << (i))
@@ -102,20 +98,19 @@
 #define PWM_R BIT(31)
 
 /* Base clock 100 MHz 
- * PWM period 100 MHz/20 kHz
+ * PWM period 100 MHz / 20 kHz
  */
 
 #define PWM_PERIOD 5000
 
-#define PWM_MAX 20000 //268435455
+#define PWM_MAX 20000
 
 /*--------------------- self-defined constants ----------------------*/
 
 #define MESSAGE_MAX_LEN 20
 
-
-
 /*-------------------------------------------------------------------*/
+
 void www();
 void log_readings();
 
@@ -140,7 +135,6 @@ void irc_isr2(void)
 {
         _Bool irc_a = (MOTOR_SR & BIT(MOTOR_SR_IRC_A_MON)) != 0;
         _Bool irc_b = (MOTOR_SR & BIT(MOTOR_SR_IRC_B_MON)) != 0;
-        // ...
         
         if((irc_a != old_a) || (irc_b != old_b))
 		{
@@ -231,7 +225,6 @@ int receive() //Argument in int port
   }
   close(sockd);
   
-  //return (atoi(buf));
   return 1;
 }
 
@@ -241,8 +234,6 @@ void controller() //Argument in int irq_count_m, int irq_count
 {
 	int kp = 75;
 	int pwm = 0;
-	
-	//int iter = 0;
 	
 	while(1)
 	{
@@ -265,25 +256,18 @@ void controller() //Argument in int irq_count_m, int irq_count
 		}
 		else
 		{
-			PWM_DUTY_CR = 0; // before 0 | PWM_F
+			PWM_DUTY_CR = 0; 
 		}
 		
 		if (pwm > 20000){
 			
-			current_duty_cycle = 100 * direction;//changed without testing
+			current_duty_cycle = 100 * direction; 
 		}
 		else{
 			float current_duty_cycle_f = ((float)pwm/PWM_MAX)*100;
 			int temp = current_duty_cycle_f;
 			current_duty_cycle = temp * direction;
 		}
-		/*if (iter == 100000){
-			semTake(lock,WAIT_FOREVER);
-			current_duty_cycle = (pwm/PWM_MAX)*100;
-			semGive(lock);
-			//printf("PWM duty cycle = %f\n", current_duty_cycle);
-			printf("test");
-		}*/
 	}
 
 }
@@ -293,7 +277,6 @@ void controller() //Argument in int irq_count_m, int irq_count
 void slave(void)
 {
 	printf("slave program running\n");
-	//TASK_ID st;
 	
 	int iter = 0;
 	int cdc = 0;
@@ -331,10 +314,9 @@ void slave(void)
 			//bargraph
 		    printf("%d ", cdc);
 		    
-		    cdc = cdc/10;
+		    cdc = cdc / 10;
 		    //printf("%d ", cdc);
 			if (cdc != 0){
-			    
 			    if (cdc < 0){
 		    	    for (i = 0; i< (10+cdc); i++){
 		    	        printf(".");
